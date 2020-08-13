@@ -5,7 +5,7 @@ using System.Text;
 
 namespace CoCoSqlTest.Models
 {
-    [Table("T_Studen")]
+    [Table("T_Student")]
     public class Student
     {
         /// <summary>
@@ -22,6 +22,11 @@ namespace CoCoSqlTest.Models
         /// 年龄
         /// </summary>
         public int Age { get; set; }
+
+        /// <summary>
+        /// 余额
+        /// </summary>
+        public decimal Money { get; set; }
 
         /// <summary>
         /// 创建日期
