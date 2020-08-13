@@ -9,21 +9,19 @@ namespace CoCoSql.Mapper
         /// <summary>
         /// 简单类型映射
         /// </summary>
-        /// <typeparam name="TIn"></typeparam>
-        /// <typeparam name="TResult"></typeparam>
+        /// <typeparam name="TIn">传入类型</typeparam>
+        /// <typeparam name="TResult">返回类型</typeparam>
         /// <returns></returns>
         internal static TResult SimpleMap<TIn, TResult>(TIn obj) where TResult : new()
-        { 
+        {
             Type resultType = typeof(TResult);
             if (resultType == typeof(string))
             {
-
+                return obj.ToString();
             }
             else if (resultType == typeof(int))
             {
-                TResult t = Activator.CreateInstance<TResult>();
-                var properties = resultType.GetProperties();
-                Int32 cc = new Int32(); 
+                return Convert.ToInt32(obj);
             }
 
             return default;
