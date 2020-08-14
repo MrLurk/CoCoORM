@@ -110,6 +110,27 @@ namespace CoCoSql.Repository
         #endregion
 
         #region 插入数据
+        public static bool Insert<T>(T insertObj) where T : class
+        {
+            var tableAttr = GetTableAttribute<T>();
+            var properties = GetInsertProperties(insertObj);
+            var values = GetInsertValues(insertObj);
+            var sql = SqlReplaceWhiteSpace($"Insert Into {tableAttr.TableName}({properties}) Values({values}) ;");
+
+            var res = DBHelper.ExecuteNonQuery(sql);
+            return res > 0 ? true : false;
+        }
+
+        public static bool Insert<T>(dynamic insertObj) where T : class
+        {
+            var tableAttr = GetTableAttribute<T>();
+            var properties = GetInsertProperties(insertObj);
+            var values = GetInsertValues(insertObj);
+            var sql = SqlReplaceWhiteSpace($"Insert Into {tableAttr.TableName}({properties}) Values({values}) ;");
+
+            var res = DBHelper.ExecuteNonQuery(sql);
+            return res > 0 ? true : false;
+        }
 
         #endregion
 
@@ -155,6 +176,41 @@ namespace CoCoSql.Repository
                 setParam += $" {name} = '{value}' ";
             }
             return setParam;
+        }
+
+        public static string GetInsertProperties(object insertObj)
+        {
+            Type type = insertObj.GetType();
+            Type insertExclusionAttrType = typeof(InsertExclusionAttribute);
+            string properties = string.Empty;
+            foreach (var propertry in type.GetProperties())
+            {
+                // 跳过标记'插入排除'特性的字段
+                var insertExclusion = propertry.CustomAttributes.FirstOrDefault(x => x.AttributeType == insertExclusionAttrType);
+                if (insertExclusion != null)
+                    continue;
+                properties += $"{propertry.Name},";
+            }
+            properties = properties.Substring(0, properties.Length - 1);
+            return properties;
+        }
+
+        public static string GetInsertValues(object insertObj)
+        {
+            Type type = insertObj.GetType();
+            string values = string.Empty;
+            Type insertExclusionAttrType = typeof(InsertExclusionAttribute);
+            foreach (var propertry in type.GetProperties())
+            {
+                // 跳过标记'插入排除'特性的字段
+                var insertExclusion = propertry.CustomAttributes.FirstOrDefault(x => x.AttributeType == insertExclusionAttrType);
+                if (insertExclusion != null)
+                    continue;
+                var value = propertry.GetValue(insertObj);
+                values += $"'{value}',";
+            }
+            values = values.Substring(0, values.Length - 1);
+            return values;
         }
 
         private static string SqlReplaceWhiteSpace(string sql)

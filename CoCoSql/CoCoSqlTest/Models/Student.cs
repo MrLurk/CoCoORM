@@ -11,6 +11,7 @@ namespace CoCoSqlTest.Models
         /// <summary>
         /// 编号
         /// </summary>
+        [InsertExclusion]
         public int Id { get; set; }
 
         /// <summary>

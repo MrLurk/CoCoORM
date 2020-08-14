@@ -35,6 +35,8 @@ namespace CoCoSqlTest
             //CoCoSqlContext.Update<Student>(x => x.Id > 1, new { Age = 22 });
             //CoCoSqlContext.Update<Student>(new { Age = 20 });
 
+            //CoCoSqlContext.Insert<Student>(new { CreateTime = DateTime.Now, Money = 1000.99M, Name = "赵六", Age = 22 });
+            //CoCoSqlContext.Insert<Student>(new Student { CreateTime = DateTime.Now, Money = 1000.99M, Name = "赵六", Age = 22 });
 
 
         }
