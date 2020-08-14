@@ -11,15 +11,15 @@ namespace CoCoSql.Repository
 {
     internal class DBHelper
     {
-        public static T ExecuteScalar<T>(string sql)
+        public static object ExecuteScalar(string sql)
         {
             using (SqlConnection connection = new SqlConnection(CoCoSqlEntrance._ConnectionString))
             {
                 connection.Open();
                 SqlCommand sqlCommand = new SqlCommand(sql,connection);
-                var obj = sqlCommand.ExecuteScalar();
-                var res = CoCoSqlMapper.SimpleMap<object, int>(obj);
-                return default;
+                var obj = sqlCommand.ExecuteScalar(); 
+                connection.Close();
+                return obj;
             }
         }
     }

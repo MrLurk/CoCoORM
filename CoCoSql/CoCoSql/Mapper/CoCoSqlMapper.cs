@@ -17,11 +17,11 @@ namespace CoCoSql.Mapper
             Type resultType = typeof(TResult);
             if (resultType == typeof(string))
             {
-                return obj.ToString();
+                // return obj.ToString();
             }
             else if (resultType == typeof(int))
             {
-                return Convert.ToInt32(obj);
+               // return Convert.ToInt32(obj);
             }
 
             return default;

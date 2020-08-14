@@ -15,11 +15,10 @@ namespace CoCoSqlTest
             CoCoSqlEntrance sql = new CoCoSqlEntrance();
             sql.Init("server=.;uid=sa;pwd=sasa;database=CoCoORMTest");
 
-            CoCoSqlContext.FirstOrDefault<Student>(x => x.Id == 1);
+           var count =  CoCoSqlContext.Count<Student>(x => x.Id == 1);
 
-            Console.WriteLine("Hello World!");
-            List<Object> obj = new List<object>();
-            obj.FirstOrDefault();
+            Console.WriteLine($"count : { count }!");
+
         }
     }
 }

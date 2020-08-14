@@ -10,18 +10,14 @@ namespace CoCoSql.ExpressionExt
     {
         private Stack<string> _SqlStack = new Stack<string>();
 
-        internal string MarkUp<T>()
+        internal string WhereMarkUp<T>()
         {
-            var type = typeof(T);
-            var objTableAttr = type.GetCustomAttributes(false).FirstOrDefault(x => x is TableAttribute);
-            if (objTableAttr == null)
-                throw new Exception("无法读取表特性");
-            var tableAttr = objTableAttr as TableAttribute;
-            var template = "Select * from {0} Where {1} ;";
+            var template = " Where {0} ";
             var sqlWhere = string.Concat(_SqlStack);
-            var sql = string.Format(template, tableAttr.TableName, sqlWhere);
-            return sql;
+            sqlWhere = string.Format(template, sqlWhere);
+            return sqlWhere;
         }
+
         protected override Expression VisitBinary(BinaryExpression node)
         {
             this.Visit(node.Right);
@@ -76,7 +72,7 @@ namespace CoCoSql.ExpressionExt
             }
             this.Visit(node.Object);
             this.Visit(node.Arguments[0]);
-            string right = _SqlStack.Pop().Replace("'","");
+            string right = _SqlStack.Pop().Replace("'", "");
             string left = _SqlStack.Pop().Replace("'", "");
             _SqlStack.Push(string.Format(template, left, right));
             return node;
