@@ -23,11 +23,31 @@ namespace CoCoSql.Repository
             return result;
         }
 
+        public static IList<T> Where<T>() where T : class
+        {
+            var sqlWhere = " Where 1 = 1";
+            var tableAttr = GetTableAttribute<T>();
+            var sql = $"Select * from {tableAttr.TableName}{ sqlWhere} ;";
+
+            IList<T> result = GetFillDataSet<T>(sql);
+            return result;
+        }
+
         public static T FirstOrDefault<T>(Expression<Func<T, bool>> expression) where T : class
         {
             var visit = new MyExpressionVisitor();
             visit.Visit(expression);
             var sqlWhere = visit.WhereMarkUp<T>();
+            var tableAttr = GetTableAttribute<T>();
+            var sql = $"Select Top 1 * from {tableAttr.TableName}{ sqlWhere} ;";
+
+            IList<T> result = GetFillDataSet<T>(sql);
+            return result.FirstOrDefault();
+        }
+
+        public static T FirstOrDefault<T>() where T : class
+        {
+            var sqlWhere = " Where 1 = 1";
             var tableAttr = GetTableAttribute<T>();
             var sql = $"Select Top 1 * from {tableAttr.TableName}{ sqlWhere} ;";
 
