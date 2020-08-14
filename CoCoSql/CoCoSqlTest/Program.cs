@@ -38,6 +38,7 @@ namespace CoCoSqlTest
             //CoCoSqlContext.Insert<Student>(new { CreateTime = DateTime.Now, Money = 1000.99M, Name = "赵六", Age = 22 });
             //CoCoSqlContext.Insert<Student>(new Student { CreateTime = DateTime.Now, Money = 1000.99M, Name = "赵六", Age = 22 });
 
+            CoCoSqlContext.Remove<Student>(x=>x.Id>3);
 
         }
     }

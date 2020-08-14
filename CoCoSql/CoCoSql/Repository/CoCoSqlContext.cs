@@ -82,7 +82,7 @@ namespace CoCoSql.Repository
 
         #endregion
 
-        #region 更新
+        #region 更新数据
         public static bool Update<T>(Expression<Func<T, bool>> expression, dynamic updateObj) where T : class
         {
             var visit = new MyExpressionVisitor();
@@ -134,6 +134,33 @@ namespace CoCoSql.Repository
 
         #endregion
 
+        #region 删除数据
+        public static int Remove<T>(Expression<Func<T, bool>> expression)
+        {
+            var visit = new MyExpressionVisitor();
+            visit.Visit(expression);
+            var sqlWhere = visit.WhereMarkUp<T>();
+            var tableAttr = GetTableAttribute<T>();
+            var sql = SqlReplaceWhiteSpace($"Delete from {tableAttr.TableName}{ sqlWhere} ;");
+
+            var result = DBHelper.ExecuteScalar(sql);
+            var count = Convert.ToInt32(result);
+            return count;
+        }
+
+        public static int Remove<T>()
+        {
+            var sqlWhere = " Where 1 = 1";
+            var tableAttr = GetTableAttribute<T>();
+            var sql = SqlReplaceWhiteSpace($"Delete from {tableAttr.TableName}{ sqlWhere} ;");
+
+            var result = DBHelper.ExecuteScalar(sql);
+            var count = Convert.ToInt32(result);
+            return count;
+        }
+
+
+        #endregion
 
         #region 私有函数
 
