@@ -24,6 +24,18 @@ namespace CoCoSql.Repository
             }
         }
 
+        public static int ExecuteNonQuery(string sql)
+        {
+            using (SqlConnection connection = new SqlConnection(CoCoSqlEntrance._ConnectionString))
+            {
+                connection.Open();
+                SqlCommand sqlCommand = new SqlCommand(sql, connection);
+                var rowNumber = sqlCommand.ExecuteNonQuery();
+                connection.Close();
+                return rowNumber;
+            }
+        }
+
         public static DataSet FillDataSet(string sql)
         {
             using (SqlConnection connection = new SqlConnection(CoCoSqlEntrance._ConnectionString))

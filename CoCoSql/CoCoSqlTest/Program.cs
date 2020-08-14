@@ -22,15 +22,21 @@ namespace CoCoSqlTest
             //Console.WriteLine($"count : { count }!");
             //Console.WriteLine($"count2 : { count2 }!");
 
-            var data = CoCoSqlContext.Where<Student>(x => x.Id > 0);
-            var data2 = CoCoSqlContext.Where<Student>();
-            Console.WriteLine(JsonConvert.SerializeObject(data));
-            Console.WriteLine(JsonConvert.SerializeObject(data2));
+            //var data = CoCoSqlContext.Where<Student>(x => x.Id > 0);
+            //var data2 = CoCoSqlContext.Where<Student>();
+            //Console.WriteLine(JsonConvert.SerializeObject(data));
+            //Console.WriteLine(JsonConvert.SerializeObject(data2));
 
-            var data3 = CoCoSqlContext.FirstOrDefault<Student>(x => x.Id > 0);
-            var data4 = CoCoSqlContext.FirstOrDefault<Student>();
-            Console.WriteLine(JsonConvert.SerializeObject(data3));
-            Console.WriteLine(JsonConvert.SerializeObject(data4));
+            //var data3 = CoCoSqlContext.FirstOrDefault<Student>(x => x.Id > 0);
+            //var data4 = CoCoSqlContext.FirstOrDefault<Student>();
+            //Console.WriteLine(JsonConvert.SerializeObject(data3));
+            //Console.WriteLine(JsonConvert.SerializeObject(data4));
+
+            //CoCoSqlContext.Update<Student>(x => x.Id > 1, new { Age = 22 });
+            //CoCoSqlContext.Update<Student>(new { Age = 20 });
+
+
+
         }
     }
 }
