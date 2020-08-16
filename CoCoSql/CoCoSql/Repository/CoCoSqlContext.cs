@@ -159,7 +159,26 @@ namespace CoCoSql.Repository
             return count;
         }
 
+        #endregion
 
+        #region 自定义 SQL
+        public static IList<T> Query<T>(string sql) where T : class
+        {
+            IList<T> result = GetFillDataSet<T>(sql);
+            return result;
+        }
+
+        public static T Single<T>(string sql) where T : class
+        {
+            IList<T> result = GetFillDataSet<T>(sql);
+            return result.FirstOrDefault();
+        }
+
+        public static int ExecuteNonQuery<T>(string sql) where T : class
+        {
+            var result = DBHelper.ExecuteNonQuery(sql);
+            return result;
+        }
         #endregion
 
         #region 私有函数
