@@ -143,7 +143,7 @@ namespace CoCoSql.Repository
             var tableAttr = GetTableAttribute<T>();
             var sql = SqlReplaceWhiteSpace($"Delete from {tableAttr.TableName}{ sqlWhere} ;");
 
-            var result = DBHelper.ExecuteScalar(sql);
+            var result = DBHelper.ExecuteNonQuery(sql);
             var count = Convert.ToInt32(result);
             return count;
         }
@@ -154,7 +154,7 @@ namespace CoCoSql.Repository
             var tableAttr = GetTableAttribute<T>();
             var sql = SqlReplaceWhiteSpace($"Delete from {tableAttr.TableName}{ sqlWhere} ;");
 
-            var result = DBHelper.ExecuteScalar(sql);
+            var result = DBHelper.ExecuteNonQuery(sql);
             var count = Convert.ToInt32(result);
             return count;
         }

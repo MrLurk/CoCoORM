@@ -14,7 +14,7 @@ namespace CoCoSqlTest
         static void Main(string[] args)
         {
             CoCoSqlEntrance sql = new CoCoSqlEntrance();
-            sql.Init("server=.;uid=sa;pwd=sasa;database=CoCoORMTest");
+            sql.Init("server=.\\MSSQLSERVER2016;uid=sa;pwd=sasa;database=CoCoORMTest");
 
             //var count = CoCoSqlContext.Count<Student>(x => x.Id == 1);
             //var count2 = CoCoSqlContext.Count<Student>();
@@ -38,7 +38,9 @@ namespace CoCoSqlTest
             //CoCoSqlContext.Insert<Student>(new { CreateTime = DateTime.Now, Money = 1000.99M, Name = "赵六", Age = 22 });
             //CoCoSqlContext.Insert<Student>(new Student { CreateTime = DateTime.Now, Money = 1000.99M, Name = "赵六", Age = 22 });
 
-            CoCoSqlContext.Remove<Student>(x=>x.Id>3);
+            var studentId = 3 ;
+            var temp = new Student() { Id =3  };
+            CoCoSqlContext.Remove<Student>(x=>x.Id> temp.Id);
 
         }
     }

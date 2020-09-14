@@ -3,23 +3,20 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Reflection;
 
-namespace CoCoSql.ExpressionExt
-{
-    internal class MyExpressionVisitor : ExpressionVisitor
-    {
+namespace CoCoSql.ExpressionExt {
+    internal class MyExpressionVisitor : ExpressionVisitor {
         private Stack<string> _SqlStack = new Stack<string>();
 
-        internal string WhereMarkUp<T>()
-        {
+        internal string WhereMarkUp<T>() {
             var template = " Where {0} ";
             var sqlWhere = string.Concat(_SqlStack);
             sqlWhere = string.Format(template, sqlWhere);
             return sqlWhere;
         }
 
-        protected override Expression VisitBinary(BinaryExpression node)
-        {
+        protected override Expression VisitBinary(BinaryExpression node) {
             this.Visit(node.Right);
             _SqlStack.Push(node.NodeType.ConvertToSqlOperator());
             this.Visit(node.Left);
@@ -31,10 +28,24 @@ namespace CoCoSql.ExpressionExt
         /// </summary>
         /// <param name="node"></param>
         /// <returns></returns>
-        protected override Expression VisitMember(MemberExpression node)
-        {
-            _SqlStack.Push($"[{node.Member.Name}]");
-            return node;
+        protected override Expression VisitMember(MemberExpression node) {
+            try {
+                var value = new object();
+                var @object = ((ConstantExpression)(node.Expression)).Value; //这个是重点
+
+                if (node.Member.MemberType == MemberTypes.Field) {
+                    value = ((FieldInfo)node.Member).GetValue(@object);
+                } else if (node.Member.MemberType == MemberTypes.Property) {
+                    value = ((PropertyInfo)node.Member).GetValue(@object);
+                }
+                _SqlStack.Push($"'{value}'");
+                return node;
+            } catch (InvalidCastException ex) {
+                _SqlStack.Push($"[{node.Member.Name}]");
+                return node;
+            } catch (Exception ex) {
+                throw;
+            }
         }
 
         /// <summary>
@@ -42,8 +53,7 @@ namespace CoCoSql.ExpressionExt
         /// </summary>
         /// <param name="node"></param>
         /// <returns></returns>
-        protected override Expression VisitConstant(ConstantExpression node)
-        {
+        protected override Expression VisitConstant(ConstantExpression node) {
             _SqlStack.Push($"'{node.Value.ToString()}'");
             return node;
         }
@@ -53,11 +63,9 @@ namespace CoCoSql.ExpressionExt
         /// </summary>
         /// <param name="node"></param>
         /// <returns></returns>
-        protected override Expression VisitMethodCall(MethodCallExpression node)
-        {
+        protected override Expression VisitMethodCall(MethodCallExpression node) {
             string template = string.Empty;
-            switch (node.Method.Name)
-            {
+            switch (node.Method.Name) {
                 case "StartsWith":
                     template = " {0} Like '{1}%' ";
                     break;
